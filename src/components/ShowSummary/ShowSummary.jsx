@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const ShowSummary = () => {
   const showSummary = useLoaderData();
@@ -27,6 +28,7 @@ const ShowSummary = () => {
     runtime,
     type,
     genres,
+    id,
   } = showSummary;
   const mediumOriginal = image?.original;
   const networkName = network?.name;
@@ -54,23 +56,49 @@ const ShowSummary = () => {
     const message = form.messageInput.value;
 
     const userDetails = {
+      id,
       name,
       email,
       phone,
       date: showDate,
       message,
-      movieName: name, // Assuming the movie name is already present
+      movieName: name,
     };
 
-    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    const previousData = localStorage.getItem("userDetails");
+
+    if (previousData) {
+      const parsedData = JSON.parse(previousData);
+
+      const existingDataIndex = parsedData.findIndex((data) => data.id === id);
+      if (existingDataIndex !== -1) {
+        parsedData[existingDataIndex] = userDetails; // Update the existing data with the new values
+      } else {
+        parsedData.push(userDetails); // Add the new data to the existing array
+      }
+
+      localStorage.setItem("userDetails", JSON.stringify(parsedData));
+    } else {
+      localStorage.setItem("userDetails", JSON.stringify([userDetails]));
+    }
 
     form.reset();
 
     // Close the modal
     handleModalClose();
 
-    // Display an alert
-    alert("Data stored successfully!");
+    if (localStorage.getItem("userDetails")) {
+      // Display SweetAlert if data is stored in local storage
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Data stored successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      return;
+    }
   };
 
   return (
@@ -143,19 +171,34 @@ const ShowSummary = () => {
               <label htmlFor="emailInput" className="form-label">
                 Email
               </label>
-              <input type="email" className="form-control" id="emailInput" />
+              <input
+                type="email"
+                className="form-control"
+                id="emailInput"
+                required
+              />
             </div>
             <div className="mb-3">
               <label htmlFor="phoneInput" className="form-label">
                 Phone
               </label>
-              <input type="tel" className="form-control" id="phoneInput" />
+              <input
+                type="tel"
+                className="form-control"
+                id="phoneInput"
+                required
+              />
             </div>
             <div className="mb-3">
               <label htmlFor="dateInput" className="form-label">
                 Date
               </label>
-              <input type="date" className="form-control" id="dateInput" />
+              <input
+                type="date"
+                className="form-control"
+                id="dateInput"
+                required
+              />
             </div>
             <div className="mb-3">
               <label htmlFor="messageInput" className="form-label">

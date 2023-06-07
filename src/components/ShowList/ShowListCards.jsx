@@ -10,6 +10,7 @@ const ShowListCards = ({ showList }) => {
     <Card className="mb-3">
       {mediumOriginal && (
         <Card.Img
+          style={{height: '450px'}}
           className="img-fluid"
           variant="top"
           src={mediumOriginal}
