@@ -10,10 +10,9 @@ const ShowList = () => {
     <Container>
       <Row>
         {showLists.map((showList) => (
-          <ShowListCards
-            key={showList.show.id}
-            showList={showList.show}
-          ></ShowListCards>
+          <Col md={3} key={showList?.show?.id}>
+            <ShowListCards showList={showList?.show}></ShowListCards>
+          </Col>
         ))}
       </Row>
     </Container>

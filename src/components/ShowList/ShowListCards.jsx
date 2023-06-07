@@ -1,23 +1,31 @@
-import React from 'react';
-import { Card, Col } from "react-bootstrap";
+import React from "react";
+import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const ShowListCards = ({ showList }) => {
-  const { image, name, summary, url } = showList;
-  const mediumImage = image?.medium;
-  
+  const { image, name, id } = showList;
+  const mediumOriginal = image?.original;
+
   return (
-    <Col md={4}>
-      <Card className="mb-3">
-        {mediumImage && (
-          <Card.Img variant="top" src={mediumImage} alt="Show Image" />
-        )}
-        <Card.Body>
-          <Card.Title>{name}</Card.Title>
-          <Card.Text>{summary}</Card.Text>
-          <Card.Link href={url}>More Info</Card.Link>
-        </Card.Body>
-      </Card>
-    </Col>
+    <Card className="mb-3">
+      {mediumOriginal && (
+        <Card.Img
+          className="img-fluid"
+          variant="top"
+          src={mediumOriginal}
+          alt="Show Image"
+        />
+      )}
+      <Card.Body>
+        <Card.Title className="text-center">{name}</Card.Title>
+
+        <div className="text-center">
+          <Link to={`/summary/${id}`} className="text-black">
+            <Button variant="outline-primary">Summary</Button>
+          </Link>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
